@@ -3,8 +3,8 @@ import { TodoList } from "../cmps/TodoList.jsx";
 import { DataTable } from "../cmps/data-table/DataTable.jsx";
 import { todoService } from "../services/todo.service.js";
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js";
-import { loadTodos, removeTodo, removeTodoOptimistic} from "../store/actions/todo.actions.js";
-
+import { loadTodos, removeTodo, removeTodoOptimistic, saveTodo} from "../store/actions/todo.actions.js";
+import { getTruthyValues } from "../services/util.service.js";
 import { SET_FILTER_BY, SET_TODOS } from "../store/reducers/todo.reducer.js";
 
 const { useState, useEffect } = React;
@@ -15,24 +15,34 @@ export function TodoIndex() {
   // const [todos, setTodos] = useState(null)
 
   const todos = useSelector((storeState) => storeState.todoModule.todos);
+  const toggledtodo = useSelector((storeState) => storeState.todoModule.todos.isDone);
   const filterBy = useSelector((storeState) => storeState.todoModule.filterBy);
   const isLoading = useSelector(
     (storeState) => storeState.todoModule.isLoading
   );
-
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [srcParamsfilterBy, setSrcParamsfilterBy] = useState(
+    todoService.getFilterFromSearchParams(searchParams)
+  );
+  // const [toggled, setToggled] = useState(false)
   const dispatch = useDispatch();
 
   // Special hook for accessing search-params:
-  const [searchParams, setSearchParams] = useSearchParams();
+  
 
-  const defaultFilter = todoService.getFilterFromSearchParams(searchParams);
+  //const filterFromSearchParams = todoService.getFilterFromSearchParams(searchParams);
 
   // const [filterBy, setFilterBy] = useState(defaultFilter)
 
   useEffect(() => {
+    // console.log("searchParams",searchParams)
+    // console.log("srcParamsfilterBy",srcParamsfilterBy)
+    console.log("filterBy",filterBy)
+    // setSrcParamsfilterBy(todoService.getFilterFromSearchParams(searchParams))
+    setSearchParams(getTruthyValues(filterBy))
     loadTodos().catch(() => showErrorMsg("cannot load todos"));
 
-    //setSearchParams(filterBy)
+    
     // todoService.query(filterBy)
     //     .then(todos => setTodos(todos))
     //     .catch(err => {
@@ -59,49 +69,26 @@ export function TodoIndex() {
 
   function onToggleTodo(todo) {
     const todoToSave = { ...todo, isDone: !todo.isDone };
-    todoService
-      .save(todoToSave)
-      .then((savedTodo) => {
-        setTodos((prevTodos) =>
-          prevTodos.map((currTodo) =>
-            currTodo._id !== todo._id ? currTodo : { ...savedTodo }
-          )
-        );
-        showSuccessMsg(
-          `Todo is ${savedTodo.isDone ? "done" : "back on your list"}`
-        );
-      })
-      .catch((err) => {
-        console.log("err:", err);
-        showErrorMsg("Cannot toggle todo " + todoId);
-      });
+    saveTodo(todoToSave)
+    // setToggled(prevToggled => !prevToggled)
+    // todoService
+    //   .save(todoToSave)
+    //   .then((savedTodo) => {
+    //     setTodos((prevTodos) =>
+    //       prevTodos.map((currTodo) =>
+    //         currTodo._id !== todo._id ? currTodo : { ...savedTodo }
+    //       )
+    //     );
+    //     showSuccessMsg(
+    //       `Todo is ${savedTodo.isDone ? "done" : "back on your list"}`
+    //     );
+    //   })
+    //   .catch((err) => {
+    //     console.log("err:", err);
+    //     showErrorMsg("Cannot toggle todo " + todoId);
+    //   });
   }
-
-  function onAddCar() {
-    const carToSave = carService.getRandomCar();
-
-    // DONE: move to a function and use dispatch/action
-    saveCar(carToSave)
-      .then((savedCar) => {
-        showSuccessMsg(`Car added (id: ${savedCar.id})`);
-      })
-      .catch((err) => {
-        showErrorMsg("Cannot add car");
-      });
-  }
-
-  function onEditToDo(car) {
-    const price = +prompt("New price?", car.price);
-    const carToSave = { ...car, price };
-
-    // DONE: move to a function and use dispatch/action
-    saveCar(carToSave)
-      .then((savedCar) => {
-        showSuccessMsg(`Car updated to price: $${savedCar.price}`);
-      })
-      .catch((err) => showErrorMsg("Cannot update car"));
-  }
-
+  
   function onSetFilter(filterBy) {
     dispatch({ type: SET_FILTER_BY, filterBy });
   }
@@ -109,7 +96,7 @@ export function TodoIndex() {
   if (!todos) return <div>Loading...</div>;
   return (
     <section className="todo-index">
-      {/* <TodoFilter filterBy={filterBy} onSetFilter={onSetFilter} /> */}
+      <TodoFilter filterBy={filterBy} onSetFilter={onSetFilter} />
       <div>
         <Link to="/todo/edit" className="btn">
           Add Todo

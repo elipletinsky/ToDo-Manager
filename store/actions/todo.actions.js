@@ -7,7 +7,7 @@ export function loadTodos() {
     store.dispatch({ type: SET_IS_LOADING, isLoading: true })
     return todoService.query(filterBy)
         .then(todos => {
-            console.log("todos:", todos)
+            // console.log("todos:", todos)
             store.dispatch({ type: SET_TODOS, todos })
         })
         .catch(err => {
@@ -43,6 +43,7 @@ export function removeTodo(todoID) {
 
 export function saveTodo(todo) {
     const type = todo._id ? UPDATE_TODO : ADD_TODO
+    // console.log("saveTodo type",type)
     return todoService.save(todo)
         .then((savedTodo) => {
             store.dispatch({ type, savedTodo })
