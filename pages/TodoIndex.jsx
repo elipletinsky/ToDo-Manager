@@ -4,7 +4,7 @@ import { DataTable } from "../cmps/data-table/DataTable.jsx"
 import { todoService } from "../services/todo.service.js"
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
 import { loadTodos, removeTodo, removeTodoOptimistic, saveTodo } from "../store/actions/todo.actions.js"
-import { ADD_CAR_TO_CART ,SET_FILTER_BY , SET_TODOS } from "../store/reducers/todo.reducer.js"
+import { SET_FILTER_BY , SET_TODOS } from "../store/reducers/todo.reducer.js"
 
 const { useState, useEffect } = React
 const { Link, useSearchParams } = ReactRouterDOM

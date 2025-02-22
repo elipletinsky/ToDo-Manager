@@ -7,6 +7,7 @@ export const userService = {
     logout,
     signup,
     getById,
+    updateScore,
     query,
     getEmptyCredentials
 }
@@ -59,6 +60,20 @@ function getEmptyCredentials() {
         username: 'muki',
         password: 'muki1',
     }
+}
+
+function updateScore(diff) {
+    const loggedInUserId = getLoggedinUser().id
+    return userService.getById(loggedInUserId)
+        .then(user => {
+            if (user.score + diff < 0) return Promise.reject('No credit')
+            user.score += diff
+            return storageService.put(STORAGE_KEY, user)
+        })
+        .then(user => {
+            _setLoggedinUser(user)
+            return user.score
+        })
 }
 
 // signup({username: 'muki', password: 'muki1', fullname: 'Muki Ja'})

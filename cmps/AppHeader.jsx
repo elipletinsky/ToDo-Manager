@@ -6,20 +6,30 @@ import { userService } from '../services/user.service.js'
 import { UserMsg } from "./UserMsg.jsx"
 import { LoginSignup } from './LoginSignup.jsx'
 import { showErrorMsg } from '../services/event-bus.service.js'
-
+const { useSelector, useDispatch } = ReactRedux
+import { login, signup,logout } from '../store/actions/user.actions.js'
 
 export function AppHeader() {
     const navigate = useNavigate()
-    const [user, setUser] = useState(userService.getLoggedinUser())
+    // const [user, setUser] = useState(userService.getLoggedinUser())
+    const user = useSelector(storeState => storeState.userModule.loggedInUser)
     
     function onLogout() {
-        userService.logout()
+        logout()
             .then(() => {
-                onSetUser(null)
+                showSuccessMsg('Logout successfully')
             })
             .catch((err) => {
                 showErrorMsg('OOPs try again')
             })
+        
+        // userService.logout()
+        //     .then(() => {
+        //         onSetUser(null)
+        //     })
+        //     .catch((err) => {
+        //         showErrorMsg('OOPs try again')
+        //     })
     }
 
     function onSetUser(user) {

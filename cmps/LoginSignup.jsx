@@ -1,82 +1,59 @@
 import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
 import { userService } from '../services/user.service.js'
+import { login, signup } from '../store/actions/user.actions.js'
+import { LoginForm } from './LoginForm.jsx'
 
 const { useState } = React
 
 export function LoginSignup({ onSetUser }) {
 
     const [isSignup, setIsSignUp] = useState(false)
-    const [credentials, setCredentials] = useState(userService.getEmptyCredentials())
-
-    function handleChange({ target }) {
-        const { name: field, value } = target
-        setCredentials(prevCreds => ({ ...prevCreds, [field]: value }))
-    }
-
-    function handleSubmit(ev) {
-        ev.preventDefault()
-        onLogin(credentials)
-    }
-
 
     function onLogin(credentials) {
-        isSignup ? signup(credentials) : login(credentials)
+        isSignup ? _signup(credentials) : _login(credentials)
     }
 
-    function login(credentials) {
-        userService.login(credentials)
-            .then(onSetUser)
+    function _login(credentials) {
+        login(credentials)
             .then(() => { showSuccessMsg('Logged in successfully') })
             .catch((err) => { showErrorMsg('Oops try again') })
     }
 
-    function signup(credentials) {
-        userService.signup(credentials)
-            .then(onSetUser)
+    function _signup(credentials) {
+        signup(credentials)
             .then(() => { showSuccessMsg('Signed in successfully') })
             .catch((err) => { showErrorMsg('Oops try again') })
     }
 
-    return (
-        <div className="login-page">
-            <form className="login-form" onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    name="username"
-                    value={credentials.username}
-                    placeholder="Username"
-                    onChange={handleChange}
-                    required
-                    autoFocus
-                />
-                <input
-                    type="password"
-                    name="password"
-                    value={credentials.password}
-                    placeholder="Password"
-                    onChange={handleChange}
-                    required
-                    autoComplete="off"
-                />
-                {isSignup && <input
-                    type="text"
-                    name="fullname"
-                    value={credentials.fullname}
-                    placeholder="Full name"
-                    onChange={handleChange}
-                    required
-                />}
-                <button>{isSignup ? 'Signup' : 'Login'}</button>
-            </form>
+    function onSignupDemoUsers() {
+        userService.signupDemoUsers()
+            .then(() => showSuccessMsg('Demo Users Are Signed up!'))
+            .catch(() => showErrorMsg('Cannot signup more demo users'))
+    }
 
+    return (
+        <div className="login-signup">
+
+            <LoginForm
+                onLogin={onLogin}
+                isSignup={isSignup}
+            />
             <div className="btns">
-                <a href="#" onClick={() => setIsSignUp(!isSignup)}>
+                <a href="#" onClick={() => setIsSignUp(isSignup => !isSignup)}>
                     {isSignup ?
                         'Already a member? Login' :
                         'New user? Signup here'
                     }
                 </a >
+                {/* <button
+                    className='demo-users'
+                    style={{ margin: '1em 0' }}
+                    onClick={onSignupDemoUsers}
+                >
+                    Signup Demo Users
+                </button> */}
             </div>
+
         </div >
     )
 }
