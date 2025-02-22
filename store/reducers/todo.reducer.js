@@ -35,7 +35,7 @@ export function todoReducer(state = initialState, cmd = {}) {
         case REMOVE_TODO:
             return {
                 ...state,
-                todos: state.todos.filter(todo => todo.id !== cmd.todoId),
+                todos: state.todos.filter(todo => todo._id !== cmd.todoId),
                 lastTodos: [...state.todos]
             }
         case ADD_TODO:
@@ -46,7 +46,7 @@ export function todoReducer(state = initialState, cmd = {}) {
         case UPDATE_TODO:
             return {
                 ...state,
-                todos: state.todos.map(todo => todo.id === cmd.todo.id ? cmd.todo : todo)
+                todos: state.todos.map(todo => todo._id === cmd.todoId ? cmd.todo : todo)
             }
         case SET_FILTER_BY:
             return {
@@ -75,7 +75,7 @@ export function todoReducer(state = initialState, cmd = {}) {
             }
 
         case REMOVE_CAR_FROM_CART:
-            const shoppingCart = state.shoppingCart.filter(todo => todo.id !== cmd.todoId)
+            const shoppingCart = state.shoppingCart.filter(todo => todo._id !== cmd.todoId)
             return { ...state, shoppingCart }
 
 
