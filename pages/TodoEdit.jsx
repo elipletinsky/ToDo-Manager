@@ -8,17 +8,27 @@ const { useNavigate, useParams } = ReactRouterDOM
 export function TodoEdit() {
 
     const [todoToEdit, setTodoToEdit] = useState(todoService.getEmptyTodo())
+    const [loaded,setLoaded] = useState(false)
     const navigate = useNavigate()
     const params = useParams()
     console.log("todoToEdit",todoToEdit)
     useEffect(() => {
-        if (params.todoId) loadTodo()
+        if (params.todoId){
+             loadTodo()//.then(()=>setLoaded(loaded=>!loaded))
+             
+            }else{
+                setLoaded(true)
+            }
     }, [])
 
     function loadTodo() {
         todoService.get(params.todoId)
-            .then(setTodoToEdit)
+            .then((todo)=>{
+                setTodoToEdit(todo)
+                setLoaded(true)
+            })
             .catch(err => console.log('err:', err))
+            
     }
 
     function handleChange({ target }) {
@@ -67,6 +77,7 @@ export function TodoEdit() {
 
     const { txt, importance, isDone, backgroundColor, txtColor } = todoToEdit
     console.log("backgroundColor",backgroundColor)
+    if (!loaded) return <div>Loading...</div>;
     return (
         <section className="todo-edit">
             <form onSubmit={onSaveTodo} style={{ backgroundColor: backgroundColor, color : txtColor }}>
