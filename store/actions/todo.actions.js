@@ -51,7 +51,7 @@ export function saveTodo(todo) {
     
     return todoService.save(todo)
         .then((savedTodo) => {
-            console.log("savedTodo txt",savedTodo.txt,"savedTodo isDone",savedTodo.isDone)
+            // console.log("savedTodo txt",savedTodo.txt,"savedTodo isDone",savedTodo.isDone)
             store.dispatch({ type, todo: savedTodo })
             getCompletionPercentage()
             return savedTodo

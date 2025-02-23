@@ -6,7 +6,7 @@ import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js";
 import { loadTodos, removeTodo, removeTodoOptimistic, saveTodo, getCompletionPercentage} from "../store/actions/todo.actions.js";
 import { getTruthyValues } from "../services/util.service.js";
 import { SET_FILTER_BY, SET_TODOS } from "../store/reducers/todo.reducer.js";
-
+import {addtobalance} from "../store/actions/user.actions.js";
 const { useState, useEffect } = React;
 const { Link, useSearchParams } = ReactRouterDOM;
 const { useSelector, useDispatch } = ReactRedux;
@@ -15,11 +15,10 @@ export function TodoIndex() {
   // const [todos, setTodos] = useState(null)
 
   const todos = useSelector((storeState) => storeState.todoModule.todos);
-  const toggledtodo = useSelector((storeState) => storeState.todoModule.todos.isDone);
+  // const toggledtodo = useSelector((storeState) => storeState.todoModule.todos.isDone);
   const filterBy = useSelector((storeState) => storeState.todoModule.filterBy);
-  const isLoading = useSelector(
-    (storeState) => storeState.todoModule.isLoading
-  );
+  const isLoading = useSelector((storeState) => storeState.todoModule.isLoading);
+  const user = useSelector(storeState => storeState.userModule.loggedInUser)
   const [searchParams, setSearchParams] = useSearchParams();
   const [srcParamsfilterBy, setSrcParamsfilterBy] = useState(
     todoService.getFilterFromSearchParams(searchParams)
@@ -66,6 +65,11 @@ export function TodoIndex() {
     console.log("todo txt",todo.txt,"todo isDone",todo.isDone)
     const todoToSave = { ...todo, isDone: !todo.isDone };
     // console.log("todoToSave",todoToSave)
+    // console.log("user",user)
+    if(user && !todo.isDone){
+      addtobalance(10)
+    }
+    
     saveTodo(todoToSave)
       .then(() => {showSuccessMsg("ToDo updated")
       // getCompletionPercentage(todos)

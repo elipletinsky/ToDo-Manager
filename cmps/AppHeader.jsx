@@ -14,6 +14,7 @@ export function AppHeader() {
     // const [user, setUser] = useState(userService.getLoggedinUser())
     const user = useSelector(storeState => storeState.userModule.loggedInUser)
     const percentOfDone = useSelector((storeState) => storeState.todoModule.percentOfDone);
+    // console.log("user",user)
     // console.log("AppHeader percentOfDone",percentOfDone)
     function onLogout() {
         logout()
@@ -34,9 +35,12 @@ export function AppHeader() {
     }
 
     function onSetUser(user) {
-        setUser(user)
+        //setUser(user)
+        //onLogin(user)
         navigate('/')
     }
+
+
     return (
         <header className="app-header full main-layout">
             <section className="header-container">
@@ -46,11 +50,12 @@ export function AppHeader() {
                     < section >
 
                         <Link to={`/user/${user._id}`}>Hello {user.fullname}</Link>
+                        <span> balance {user.balance}</span>
                         <button onClick={onLogout}>Logout</button>
                     </ section >
                 ) : (
                     <section>
-                        <LoginSignup onSetUser={onSetUser} />
+                        <LoginSignup />
                     </section>
                 )}
                 <nav className="app-nav">

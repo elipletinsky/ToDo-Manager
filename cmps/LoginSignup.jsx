@@ -5,7 +5,7 @@ import { LoginForm } from './LoginForm.jsx'
 
 const { useState } = React
 
-export function LoginSignup({ onSetUser }) {
+export function LoginSignup() {
 
     const [isSignup, setIsSignUp] = useState(false)
 
