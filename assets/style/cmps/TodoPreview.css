@@ -8,7 +8,7 @@
 
 .todo-preview h4 {
     text-transform: capitalize;
-    color: black;
+    /* color: black; */
 }
 
 .todo-preview img {

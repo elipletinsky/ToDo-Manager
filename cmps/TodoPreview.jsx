@@ -14,7 +14,7 @@ export function TodoPreview({ todo, onToggleTodo }) {
     }
 
     return (
-        <article className="todo-preview">
+        <article className="todo-preview" style={{ backgroundColor: todo.backgroundColor, color : todo.txtColor }}>
             <h2 className={(toggled)? 'done' : ''} onClick={onToggleTodoclicked}>
                 Todo: {todo.txt}
             </h2>

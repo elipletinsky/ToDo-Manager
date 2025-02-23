@@ -8,6 +8,7 @@ export const UPDATE_TODO = 'UPDATE_TODO'
 export const SET_FILTER_BY = 'SET_FILTER_BY'
 export const SET_IS_LOADING = 'SET_IS_LOADING'
 export const UNDO_TODOS = 'UNDO_TODOS'
+export const SET_PRECENT_OF_DONE = 'SET_PRECENT_OF_DONE'
 
 //* Shopping cart
 export const TOGGLE_CART_IS_SHOWN = 'TOGGLE_CART_IS_SHOWN'
@@ -22,6 +23,7 @@ const initialState = {
     isLoading: false,
     shoppingCart: [],
     isCartShown: false,
+    percentOfDone: 0
 }
 
 export function todoReducer(state = initialState, cmd = {}) {
@@ -46,7 +48,7 @@ export function todoReducer(state = initialState, cmd = {}) {
         case UPDATE_TODO:
             return {
                 ...state,
-                todos: state.todos.map(todo => todo._id === cmd.todoId ? cmd.todo : todo)
+                todos: state.todos.map(todo => todo._id === cmd.todo._id ? cmd.todo : todo)
             }
         case SET_FILTER_BY:
             return {
@@ -81,6 +83,12 @@ export function todoReducer(state = initialState, cmd = {}) {
 
         case CLEAR_CART:
             return { ...state, shoppingCart: [] }
+
+        case SET_PRECENT_OF_DONE:
+            return{
+                ...state,
+                percentOfDone: cmd.percentOfDone
+            }
 
         default:
             return state

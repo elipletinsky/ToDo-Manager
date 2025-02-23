@@ -13,7 +13,8 @@ export function AppHeader() {
     const navigate = useNavigate()
     // const [user, setUser] = useState(userService.getLoggedinUser())
     const user = useSelector(storeState => storeState.userModule.loggedInUser)
-    
+    const percentOfDone = useSelector((storeState) => storeState.todoModule.percentOfDone);
+    // console.log("AppHeader percentOfDone",percentOfDone)
     function onLogout() {
         logout()
             .then(() => {
@@ -40,6 +41,7 @@ export function AppHeader() {
         <header className="app-header full main-layout">
             <section className="header-container">
                 <h1>React Todo App</h1>
+                <span>{percentOfDone}% of ToDos are Done</span>
                 {user ? (
                     < section >
 

@@ -3,7 +3,7 @@ import { TodoList } from "../cmps/TodoList.jsx";
 import { DataTable } from "../cmps/data-table/DataTable.jsx";
 import { todoService } from "../services/todo.service.js";
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js";
-import { loadTodos, removeTodo, removeTodoOptimistic, saveTodo} from "../store/actions/todo.actions.js";
+import { loadTodos, removeTodo, removeTodoOptimistic, saveTodo, getCompletionPercentage} from "../store/actions/todo.actions.js";
 import { getTruthyValues } from "../services/util.service.js";
 import { SET_FILTER_BY, SET_TODOS } from "../store/reducers/todo.reducer.js";
 
@@ -37,7 +37,7 @@ export function TodoIndex() {
   useEffect(() => {
     // console.log("searchParams",searchParams)
     // console.log("srcParamsfilterBy",srcParamsfilterBy)
-    console.log("filterBy",filterBy)
+    // console.log("filterBy",filterBy)
     // setSrcParamsfilterBy(todoService.getFilterFromSearchParams(searchParams))
     setSearchParams(getTruthyValues(filterBy))
     loadTodos().catch(() => showErrorMsg("cannot load todos"));
@@ -53,7 +53,9 @@ export function TodoIndex() {
 
   function onRemoveTodo(todoId) {
     removeTodoOptimistic(todoId)
-      .then(() => showSuccessMsg("ToDo removed"))
+      .then(() => {showSuccessMsg("ToDo removed")
+        // getCompletionPercentage(todos)
+      })
       .catch(() => showErrorMsg("Cannot remove ToDo"));
 
     // todoService.remove(todoId)
@@ -68,8 +70,17 @@ export function TodoIndex() {
   }
 
   function onToggleTodo(todo) {
+    // console.log("onToggleTodo",todo.txt,todo.isDone)
+    console.log("todo txt",todo.txt,"todo isDone",todo.isDone)
     const todoToSave = { ...todo, isDone: !todo.isDone };
+    // console.log("todoToSave",todoToSave)
     saveTodo(todoToSave)
+      .then(() => {showSuccessMsg("ToDo updated")
+      // getCompletionPercentage(todos)
+    })
+    .catch(() => showErrorMsg("Cannot update ToDo"));
+
+
     // setToggled(prevToggled => !prevToggled)
     // todoService
     //   .save(todoToSave)

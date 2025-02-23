@@ -10,7 +10,7 @@ export function TodoEdit() {
     const [todoToEdit, setTodoToEdit] = useState(todoService.getEmptyTodo())
     const navigate = useNavigate()
     const params = useParams()
-
+    console.log("todoToEdit",todoToEdit)
     useEffect(() => {
         if (params.todoId) loadTodo()
     }, [])
@@ -44,6 +44,7 @@ export function TodoEdit() {
 
     function onSaveTodo(ev) {
         ev.preventDefault()
+        console.log("todoToEdit",todoToEdit)
         saveTodo(todoToEdit)
             .then(() => {
                 showSuccessMsg('ToDo Saved!')
@@ -64,11 +65,11 @@ export function TodoEdit() {
         //     })
     }
 
-    const { txt, importance, isDone } = todoToEdit
-
+    const { txt, importance, isDone, backgroundColor, txtColor } = todoToEdit
+    console.log("backgroundColor",backgroundColor)
     return (
         <section className="todo-edit">
-            <form onSubmit={onSaveTodo} >
+            <form onSubmit={onSaveTodo} style={{ backgroundColor: backgroundColor, color : txtColor }}>
                 <label htmlFor="txt">Text:</label>
                 <input onChange={handleChange} value={txt} type="text" name="txt" id="txt" />
 
@@ -77,6 +78,12 @@ export function TodoEdit() {
 
                 <label htmlFor="isDone">isDone:</label>
                 <input onChange={handleChange} value={isDone} type="checkbox" name="isDone" id="isDone" />
+
+                <label htmlFor="backgroundColor">Background Color:</label>
+                <input onChange={handleChange} value={backgroundColor} type="color" name="backgroundColor" id="backgroundColor" />
+
+                <label htmlFor="txtColor">Text Color:</label>
+                <input onChange={handleChange} value={txtColor} type="color" name="txtColor" id="txtColor" />
 
 
                 <button>Save</button>

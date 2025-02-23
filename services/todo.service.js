@@ -76,7 +76,7 @@ function save(todo) {
 }
 
 function getEmptyTodo(txt = '', importance = 5) {
-    return { txt, importance, isDone: false }
+    return { txt, importance, isDone: false,backgroundColor: "#ffe4c4", txtColor: "black" }
 }
 
 function getDefaultFilter() {
@@ -144,6 +144,13 @@ function _getTodoCountByImportanceMap(todos) {
     return todoCountByImportanceMap
 }
 
+// function getCompletionPercentage(todos) {
+//     if (todos.length === 0) return 0; // Prevent division by zero
+
+//     const doneCount = todos.filter(todo => todo.isDone).length;
+    
+//     return (doneCount / todos.length) * 100;
+// }
 
 // Data Model:
 // const todo = {
