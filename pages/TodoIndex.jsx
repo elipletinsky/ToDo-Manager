@@ -51,22 +51,14 @@ export function TodoIndex() {
     //     })
   }, [filterBy]);
 
-  function onRemoveTodo(todoId) {
-    removeTodoOptimistic(todoId)
+  function onRemoveTodo(todoId, todotxt) {
+    if(confirm(`delete ${todotxt}`)){
+      removeTodoOptimistic(todoId)
       .then(() => {showSuccessMsg("ToDo removed")
         // getCompletionPercentage(todos)
       })
       .catch(() => showErrorMsg("Cannot remove ToDo"));
-
-    // todoService.remove(todoId)
-    //     .then(() => {
-    //         setTodos(prevTodos => prevTodos.filter(todo => todo._id !== todoId))
-    //         showSuccessMsg(`Todo removed`)
-    //     })
-    //     .catch(err => {
-    //         console.log('err:', err)
-    //         showErrorMsg('Cannot remove todo ' + todoId)
-    //     })
+    }
   }
 
   function onToggleTodo(todo) {
@@ -79,25 +71,6 @@ export function TodoIndex() {
       // getCompletionPercentage(todos)
     })
     .catch(() => showErrorMsg("Cannot update ToDo"));
-
-
-    // setToggled(prevToggled => !prevToggled)
-    // todoService
-    //   .save(todoToSave)
-    //   .then((savedTodo) => {
-    //     setTodos((prevTodos) =>
-    //       prevTodos.map((currTodo) =>
-    //         currTodo._id !== todo._id ? currTodo : { ...savedTodo }
-    //       )
-    //     );
-    //     showSuccessMsg(
-    //       `Todo is ${savedTodo.isDone ? "done" : "back on your list"}`
-    //     );
-    //   })
-    //   .catch((err) => {
-    //     console.log("err:", err);
-    //     showErrorMsg("Cannot toggle todo " + todoId);
-    //   });
   }
   
   function onSetFilter(filterBy) {
