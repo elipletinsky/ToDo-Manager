@@ -53,6 +53,22 @@ export function addtobalance(diff){
         })
 }
 
+export function updateuser(user, activityTxt) {
+    // const type = user._id ? UPDATE_TODO : ADD_TODO
+    // console.log("todo txt",todo.txt,"todo isDone",todo.isDone)
+    
+    return userService.updateUser(user,activityTxt)
+        .then((savedUser) => {
+            // console.log("savedTodo txt",savedTodo.txt,"savedTodo isDone",savedTodo.isDone)
+            store.dispatch({ type: SET_USER, user: savedUser})
+            return savedUser
+        })
+        .catch(err => {
+            console.log('user action -> Cannot save user', err)
+            throw err
+        })
+}
+
 export function checkout(diff) {
     return userService.updateScore(-diff)
         .then(newScore => {

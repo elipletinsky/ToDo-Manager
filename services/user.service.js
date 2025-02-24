@@ -9,7 +9,9 @@ export const userService = {
     getById,
     updateBalance,
     query,
-    getEmptyCredentials
+    getEmptyCredentials,
+    updateUser,
+    addActivity
 }
 const STORAGE_KEY_LOGGEDIN = 'user'
 const STORAGE_KEY = 'userDB'
@@ -61,8 +63,21 @@ function getEmptyCredentials() {
         username: 'muki',
         password: 'muki1',
         balance: 10,
+        txtColor: 'black',
+        backgroundColor: '#ffe4c4',
         activities: []
     }
+}
+
+function updateUser(user, activityTxt){
+    if (user._id) {
+        console.log("user.activities",user.activities)
+        const activity = addActivity(activityTxt)
+        console.log("activity",activity)
+        user.activities.push(activity)
+        console.log("updated  user.activities", user.activities)
+        return storageService.put(STORAGE_KEY, user)
+    } 
 }
 
 function updateBalance(diff) {
@@ -78,6 +93,12 @@ function updateBalance(diff) {
             return user.balance
         })
 }
+
+ function addActivity(activityTxt){
+    const now = Date.now()
+    return {txt: activityTxt, at: now}
+    
+  }
 
 // signup({username: 'muki', password: 'muki1', fullname: 'Muki Ja'})
 // login({username: 'muki', password: 'muki1'})

@@ -45,11 +45,17 @@ export function AppHeader() {
         <header className="app-header full main-layout">
             <section className="header-container">
                 <h1>React Todo App</h1>
-                <span>{percentOfDone}% of ToDos are Done</span>
+                
+                <nav className="app-nav">
+                    <NavLink to="/" >Home</NavLink>
+                    <NavLink to="/about" >About</NavLink>
+                    <NavLink to="/todo" >Todos</NavLink>
+                    <NavLink to="/dashboard" >Dashboard</NavLink>
+                </nav>
                 {user ? (
-                    < section >
-
-                        <Link to={`/user/${user._id}`}>Hello {user.fullname}</Link>
+                    < section  className='user-Info' style={{ backgroundColor: user.backgroundColor, color : user.txtColor }}>
+                        <h2><Link to={`/user/${user._id}`}>Hello {user.fullname}</Link></h2>
+                        <span>{percentOfDone}% of ToDos are Done </span>
                         <span> balance {user.balance}</span>
                         <button onClick={onLogout}>Logout</button>
                     </ section >
@@ -58,12 +64,6 @@ export function AppHeader() {
                         <LoginSignup />
                     </section>
                 )}
-                <nav className="app-nav">
-                    <NavLink to="/" >Home</NavLink>
-                    <NavLink to="/about" >About</NavLink>
-                    <NavLink to="/todo" >Todos</NavLink>
-                    <NavLink to="/dashboard" >Dashboard</NavLink>
-                </nav>
             </section>
             <UserMsg />
         </header>

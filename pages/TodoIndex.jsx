@@ -2,11 +2,12 @@ import { TodoFilter } from "../cmps/TodoFilter.jsx";
 import { TodoList } from "../cmps/TodoList.jsx";
 import { DataTable } from "../cmps/data-table/DataTable.jsx";
 import { todoService } from "../services/todo.service.js";
+import { userService } from "../services/user.service.js";
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js";
 import { loadTodos, removeTodo, removeTodoOptimistic, saveTodo, getCompletionPercentage} from "../store/actions/todo.actions.js";
 import { getTruthyValues } from "../services/util.service.js";
 import { SET_FILTER_BY, SET_TODOS } from "../store/reducers/todo.reducer.js";
-import {addtobalance} from "../store/actions/user.actions.js";
+import {addtobalance, updateuser} from "../store/actions/user.actions.js";
 const { useState, useEffect } = React;
 const { Link, useSearchParams } = ReactRouterDOM;
 const { useSelector, useDispatch } = ReactRedux;
@@ -53,7 +54,9 @@ export function TodoIndex() {
   function onRemoveTodo(todoId, todotxt) {
     if(confirm(`delete ${todotxt}`)){
       removeTodoOptimistic(todoId)
-      .then(() => {showSuccessMsg("ToDo removed")
+      .then(() => {
+        showSuccessMsg("ToDo removed")
+        if(user)updateuser(user,`removed ${todotxt}`)
         // getCompletionPercentage(todos)
       })
       .catch(() => showErrorMsg("Cannot remove ToDo"));
@@ -66,8 +69,15 @@ export function TodoIndex() {
     const todoToSave = { ...todo, isDone: !todo.isDone };
     // console.log("todoToSave",todoToSave)
     // console.log("user",user)
-    if(user && !todo.isDone){
-      addtobalance(10)
+    
+    
+    if(user){
+      if(!todo.isDone){
+        updateuser(user,`finished ${todo.txt}`) 
+        addtobalance(10)
+      }else{
+        updateuser(user,`started ${todo.txt}`) 
+      }
     }
     
     saveTodo(todoToSave)
@@ -76,7 +86,7 @@ export function TodoIndex() {
     })
     .catch(() => showErrorMsg("Cannot update ToDo"));
   }
-  
+
   function onSetFilter(filterBy) {
     dispatch({ type: SET_FILTER_BY, filterBy });
   }

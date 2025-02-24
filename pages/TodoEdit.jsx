@@ -1,12 +1,14 @@
 import { todoService } from "../services/todo.service.js"
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
 import { saveTodo } from "../store/actions/todo.actions.js"
-
+import {updateuser} from "../store/actions/user.actions.js"
+const { useSelector, useDispatch } = ReactRedux;
 const { useState, useEffect } = React
 const { useNavigate, useParams } = ReactRouterDOM
 
 export function TodoEdit() {
 
+    const user = useSelector(storeState => storeState.userModule.loggedInUser)
     const [todoToEdit, setTodoToEdit] = useState(todoService.getEmptyTodo())
     const [loaded,setLoaded] = useState(false)
     const navigate = useNavigate()
@@ -14,8 +16,7 @@ export function TodoEdit() {
     console.log("todoToEdit",todoToEdit)
     useEffect(() => {
         if (params.todoId){
-             loadTodo()//.then(()=>setLoaded(loaded=>!loaded))
-             
+             loadTodo()
             }else{
                 setLoaded(true)
             }
@@ -58,6 +59,7 @@ export function TodoEdit() {
         saveTodo(todoToEdit)
             .then(() => {
                 showSuccessMsg('ToDo Saved!')
+                if(user)updateuser(user,`added ${todoToEdit.txt}`)
                 navigate('/todo')
             })
             .catch(err => {

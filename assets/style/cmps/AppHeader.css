@@ -26,6 +26,11 @@ a.active {
     text-decoration: underline;
 }
 
+.user-Info{
+    display: flex;
+    flex-direction: column;
+}
+
 
 @media (max-width: 720px) {
     .app-header {

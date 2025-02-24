@@ -7,6 +7,7 @@ export const CHANGE_BY = 'CHANGE_BY'
 
 //* User
 export const SET_USER = 'SET_USER'
+export const UPDATE_USER = 'UPDATE_USER'
 export const SET_USER_SCORE = 'SET_USER_SCORE'
 
 
@@ -22,6 +23,11 @@ export function userReducer(state = initialState, cmd = {}) {
                 ...state,
                 loggedInUser: cmd.user
             }
+        // case UPDATE_USER:
+        //     return {
+        //         ...state,
+        //         todos: state.todos.map(todo => todo._id === cmd.todo._id ? cmd.todo : todo)
+        //     }
         case INCREMENT:
             return {
                 ...state,
