@@ -1,4 +1,5 @@
 const { useState, useEffect } = React;
+import { getBaseUrl } from "../services/util.service.js";
 
 
 export function TodoPreview({ todo, onToggleTodo }) {
@@ -19,7 +20,7 @@ export function TodoPreview({ todo, onToggleTodo }) {
                 Todo: {todo.txt}
             </h2>
             <h4>Todo Importance: {todo.importance}</h4>
-            <img src={`../assets/img/${'todo'}.png`} alt="" />
+            <img src={`${getBaseUrl()}/assets/img/${'todo'}.png`} alt="" />
         </article>
     )
 }

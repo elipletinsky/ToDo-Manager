@@ -5,7 +5,8 @@ export const utilService = {
     loadFromStorage,
     saveToStorage,
     animateCSS,
-    debounce
+    debounce,
+    getBaseUrl
 }
 
 function makeId(length = 6) {
@@ -79,4 +80,10 @@ export function getTruthyValues(obj) {
         }
     }
     return newObj
+}
+
+export function getBaseUrl() {
+    const { protocol, hostname, port, pathname } = window.location;
+    const path = pathname.split('/').slice(0, -1).join('/');
+    return `${protocol}//${hostname}${port ? `:${port}` : ''}${path}`;
 }
